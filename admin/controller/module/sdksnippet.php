@@ -61,7 +61,8 @@ class ControllerModuleSdksnippet extends Controller {
         $this->data['text_browse'] = $this->language->get('text_browse');
         $this->data['text_clear'] = $this->language->get('text_clear');
         $this->data['other_information_label'] = $this->language->get('other_information_label');
-        $this->data['position_information_label'] = $this->language->get('position_information_label');
+        $this->data['after_information_label'] = $this->language->get('after_information_label');
+        //$this->data['position_information_label'] = $this->language->get('position_information_label');
         $this->data['entry_payment_method'] = $this->language->get('entry_payment_method');
 		$this->data['entry_layout'] = $this->language->get('entry_layout');
 		$this->data['entry_position'] = $this->language->get('entry_position');
@@ -182,15 +183,20 @@ class ControllerModuleSdksnippet extends Controller {
         } else {
             $this->data['sdksnippet_other_information'] = $this->config->get('sdksnippet_other_information');
         }
-        if (isset($this->request->post['sdksnippet_position_information'])) {
-            $this->data['sdksnippet_position_information'] = $this->request->post['sdksnippet_position_information'];
+        if (isset($this->request->post['sdksnippet_after_information'])) {
+            $this->data['sdksnippet_after_information'] = $this->request->post['sdksnippet_after_information'];
         } else {
-            $this->data['sdksnippet_position_information'] = $this->config->get('sdksnippet_position_information');
+            $this->data['sdksnippet_after_information'] = $this->config->get('sdksnippet_after_information');
         }
+//        if (isset($this->request->post['sdksnippet_position_information'])) {
+//            $this->data['sdksnippet_position_information'] = $this->request->post['sdksnippet_position_information'];
+//        } else {
+//            $this->data['sdksnippet_position_information'] = $this->config->get('sdksnippet_position_information');
+//        }
 
         $this->load->model('luckycycle/position_information');
 
-        $this->data['position_information_datas'] = $this->model_luckycycle_position_information->getPositionData();
+        //$this->data['position_information_datas'] = $this->model_luckycycle_position_information->getPositionData();
 		/* End Block*/
 	 
 		$this->data['modules'] = array();

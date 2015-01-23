@@ -33,18 +33,12 @@
                 $API_ID = $this->config->get('sdksnippet_text_field');
                 $OPERATION_ID = $this->config->get('sdksnippet_operation_id');
                 $useBanner = $this->config->get('sdksnippet_use_mode');
-                $otherInformation = $this->config->get('sdksnippet_other_information');
-                $positionInformation = $this->config->get('sdksnippet_position_information');
+                $beforeInformation = $this->config->get('sdksnippet_other_information');
+                $afterInformation = $this->config->get('sdksnippet_after_information');
 				if ($API_ID && $OPERATION_ID && isset($this->session->data['order_id'])) {
                     $banner_default = $this->config->get('config_banner');
                     $iframe_width   = $this->config->get('sdksnippet_iframe_width');
-                    if ($iframe_width == null) {
-                        $iframe_width = 200;
-                    }
                     $iframe_height = $this->config->get('sdksnippet_iframe_height');
-                    if ($iframe_height == null) {
-                        $iframe_height = 200;
-                    }
 					$this->load->model('checkout/order');
 					$LuckyCycle_PaymentMethod = unserialize($this->config->get('sdkextension'));
 					$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
@@ -151,38 +145,48 @@
                                     if ($banner_default == null) {
                                         $banner_default = 'no_image.jpg';
                                     }
-                                    $imageUrl = $this->model_tool_image->resize($banner_default, $iframe_width, $iframe_height);
-                                    if (!$positionInformation && isset($otherInformation)) {
-                                        $htmlLuclyCyle .= "<div>" .$otherInformation. "</div>";
+                                    if (!$iframe_width) {
+                                        $iframe_width_resize = 100;
+                                    } else {
+                                        $iframe_width_resize = $iframe_width;
+                                    }
+                                    if (!$iframe_height) {
+                                        $iframe_height_resize = 100;
+                                    } else {
+                                        $iframe_height_resize = $iframe_height;
+                                    }
+                                    $imageUrl = $this->model_tool_image->resize($banner_default, $iframe_width_resize, $iframe_height_resize);
+                                    if (isset($beforeInformation)) {
+                                        $htmlLuclyCyle .= "<div>" .$beforeInformation. "</div>";
                                     }
                                     if (!$useBanner) {
-                                        $htmlLuclyCyle .='<div style="text-align: center">
+                                        $htmlLuclyCyle .='<div>
                                                             <iframe frameborder="0"
                                                                     src="http://www.luckycycle.com/play/'. $poke['computed_hash'] .'"
                                                                     target="_blank"
                                                                     align="center"
                                                                     scrolling="no"
-                                                                    style="margin: auto"
-                                                                    width="'. $iframe_width.'px' .'"
-                                                                    height="'. $iframe_height.'px' .'"
-                                                                    frameborder="0"
-                                                                    scrolling="no"></iframe>
-                                                            </div>';
+                                                                    style="margin: auto; max-width: 98%;" ';
+                                                            if ($iframe_width) { $htmlLuclyCyle .= 'width="'. $iframe_width.'px" ' ;}
+                                                            if ($iframe_height) { $htmlLuclyCyle .= 'height="'. $iframe_height.'px" ' ;}
+                                                            $htmlLuclyCyle .='id="luckycycle_iframe"></iframe></div>';
                                     } else {
                                         if ($poke['banner_url'] == null) {
                                             $htmlLuclyCyle .= '<a href="http://www.luckycycle.com/play/' . $poke['computed_hash'] . '" target="_blank" id="lc_banner_url">
-                                                <img src="'.$imageUrl.'"
-                                                     width="'. $iframe_width.'px' . '" height="'. $iframe_height.'px' .'" style="margin: auto;">
-                                            </a>';
+                                                <img src="'.$imageUrl.'" ';
+                                                if ($iframe_width) { $htmlLuclyCyle .= 'width="'. $iframe_width.'px" ' ;}
+                                                if ($iframe_height) { $htmlLuclyCyle .= 'height="'. $iframe_height.'px" ' ;}
+                                                $htmlLuclyCyle .=' style="margin: auto; max-width: 98%;" /></a>';
                                         } else {
                                             $htmlLuclyCyle .= '<a href="http://www.luckycycle.com/play/'.$poke['computed_hash'] .'" target="_blank" id="lc_banner_url">
-                                                <img src="'.$poke['banner_url'] .'" width="'. $iframe_width.'px' .'"
-                                                     height="'. $iframe_height.'px' .'"  style="margin: auto;">
-                                            </a>';
+                                                <img src="'.$poke['banner_url'] .'" ';
+                                                if ($iframe_width) { $htmlLuclyCyle .= 'width="'. $iframe_width.'px" ' ;}
+                                                if ($iframe_height) { $htmlLuclyCyle .= 'height="'. $iframe_height.'px" ' ;}
+                                                $htmlLuclyCyle .=' style="margin: auto; max-width: 98%;" /></a>';
                                         }
                                     }
-                                    if ($positionInformation && isset($otherInformation)) {
-                                        $htmlLuclyCyle .= "<div>" .$otherInformation. "</div>";
+                                    if (isset($afterInformation)) {
+                                        $htmlLuclyCyle .= "<div>" .$afterInformation. "</div>";
                                     }
                                     $this->session->data['htmlLuclyCyle'] = $htmlLuclyCyle;
                                 } else {
@@ -211,7 +215,7 @@
 					if (isset($this->session->data['htmlLuclyCyle']))
 					$htmlLuckyCyle = $this->session->data['htmlLuclyCyle'];
 					if (isset($htmlLuckyCyle) && $htmlLuckyCyle != '' && isset($API_ID) && isset($OPERATION_ID)) {
-					    echo "<center><div>". $htmlLuckyCyle . "</div></center>";
+					    echo "<div style='text-align: center'>". $htmlLuckyCyle . "</div>";
 					} else { echo ''; }
 				?>
 			]]></add>

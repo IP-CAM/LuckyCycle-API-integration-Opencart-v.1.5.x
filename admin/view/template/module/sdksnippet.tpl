@@ -64,16 +64,8 @@
                 <td><textarea name="sdksnippet_other_information" cols="40" rows="5"><?php echo $sdksnippet_other_information; ?></textarea></td>
             </tr>
             <tr>
-                <td><?php echo $position_information_label; ?></td>
-                <td><select name="sdksnippet_position_information">
-                        <?php foreach ($position_information_datas as $position_information) { ?>
-                        <?php if ($position_information['alias'] == $sdksnippet_position_information) { ?>
-                        <option value="<?php echo $position_information['alias']; ?>" selected="selected"><?php echo $position_information['name']; ?></option>
-                        <?php } else { ?>
-                        <option value="<?php echo $position_information['alias']; ?>"><?php echo $position_information['name']; ?></option>
-                        <?php } ?>
-                        <?php } ?>
-                    </select></td>
+                <td><?php echo $after_information_label; ?></td>
+                <td><textarea name="sdksnippet_after_information" cols="40" rows="5"><?php echo $sdksnippet_after_information; ?></textarea></td>
             </tr>
           <tr>
           	<td><?php echo $entry_payment_method; ?></td>
